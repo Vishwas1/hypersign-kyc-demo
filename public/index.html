@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+
+<body onload="load()">
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <button type="button" class="btn btn-primary" onclick="openWidget()">Verify Your Identity</button>
+        </div>
+        <!-- <div class="row">
+            <iframe src="" title="W3Schools Free Online Web Tutorials" id="iframe" height="900" width="850"></iframe>
+        </div> -->
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+    let widgetUrl;
+    function load() {
+        const url = `${window.location.origin}/config`
+        fetch(url).
+            then(resp => resp.json()).
+            then(config => {
+                const { ssiAccessToken, kycAccessToken } = config;
+                widgetUrl = `https://verify.hypersign.id?kycAccessToken=${kycAccessToken}&ssiAccessToken=${ssiAccessToken}`
+                // document.getElementById('iframe').src = widgetUrl
+            })
+    }
+
+    function openWidget() {
+        window.open(widgetUrl, 'Popup Window', 'width=850,height=900');
+    }
+
+
+    window.addEventListener('message', function (event) {
+        if (event.origin === 'https://verify.hypersign.id') {
+            console.log('Received message from popup:', event.data);
+            // make sure to parse the data before use
+            const data = JSON.parse(event.data)
+
+            // we send these 3 vaules: 
+            // status = success / fail, 
+            // idToken = you will use this token to extract user's data
+            // message = a simple message (if any)
+            const { status, idToken, message } = data;
+
+            if (status === 'success') {
+                alert('Successfully finished the KYC idToken = ' + idToken)
+            }
+            else if (status === 'fail') {
+                alert('Failed to finish KYC')
+            }
+        }
+    });
+
+
+</script>
