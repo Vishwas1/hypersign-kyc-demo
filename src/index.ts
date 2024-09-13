@@ -50,10 +50,11 @@ export async function setup() {
 }
 
 function server() {
-    setup()
+    // setup()
     const app = express()
     const port = ProductConfig.PORT || 5001;
     app.use(express.static("public"));
+    app.use(express.json())
     Routes(app)
 
     app.listen(port, () => {

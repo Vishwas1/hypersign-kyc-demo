@@ -12,4 +12,17 @@ export function Routes(app: express.Application){
             ssiAccessToken: READ_WRITE_KEYS.getREADWRITEKeys().keys.ssiAccessToken
         });
     });
+
+
+    app.post('/kyc/hook', (req: Request, res: Response) => {
+
+        console.log('---- Inside /kyc/hook ----- ')
+        // console.log(req)
+        console.log(req.headers)
+
+        console.log(req.body)
+
+        
+        res.status(200)
+    })
 }
