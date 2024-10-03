@@ -24,6 +24,7 @@ export class SSIServiceAccess implements IServiceAccess{
     }
 
     async initialize(): Promise<void>{   
+        console.log(this.keysInstance.keys.ssiAccessToken)
         if(!this.keysInstance.keys.ssiAccessToken){
             const url = ProductConfig.ENTITY_DEV_DASHBOARD_OAUTH_URL;
             const headers = {
@@ -34,7 +35,7 @@ export class SSIServiceAccess implements IServiceAccess{
             this.accessToken  =  res.access_token
             this.keysInstance.keys.ssiAccessToken = res.access_token
         } else {
-            console.log('Token already exists no need for refres')
+            console.log('Token already exists no need for SSI')
             this.accessToken  =  this.keysInstance.keys.ssiAccessToken
         }
     }
@@ -63,7 +64,7 @@ export class KYCServiceAccess implements IServiceAccess{
             this.accessToken  =  res.access_token
             this.keysInstance.keys.kycAccessToken = res.access_token
         } else {
-            console.log('Token already exists no need for refres')
+            console.log('Token already exists no need for KYC')
             this.accessToken  =  this.keysInstance.keys.kycAccessToken
         }
     }

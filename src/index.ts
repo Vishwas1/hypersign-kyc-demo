@@ -29,8 +29,8 @@ function validateEnv(): boolean{
 export async function setup() {
     validateEnv()
     
-    // const ssiserviceAccess = new SSIServiceAccess()
-    // await ssiserviceAccess.initialize();
+    const ssiserviceAccess = new SSIServiceAccess()
+    await ssiserviceAccess.initialize();
 
     const kycServiceAccess = new KYCServiceAccess()
     await kycServiceAccess.initialize()
@@ -42,15 +42,15 @@ export async function setup() {
     // const res = await mydid.registerDid()
 
     // Pull session details from kyc
-    const myKyc = new MyKyc(kycServiceAccess.accessToken)
-    const allSessions = await myKyc.getSessions()
-    console.log(allSessions)
+    // const myKyc = new MyKyc(kycServiceAccess.accessToken)
+    // const allSessions = await myKyc.getSessions()
+    // console.log(allSessions)
 
     READ_WRITE_KEYS.getREADWRITEKeys().WRITE()
 }
 
 function server() {
-    // setup()
+    setup()
     const app = express()
     const port = ProductConfig.PORT || 5001;
     app.use(express.static("public"));

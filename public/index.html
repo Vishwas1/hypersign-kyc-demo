@@ -27,11 +27,7 @@
         <div class="row">
             <button type="button" class="btn btn-primary" onclick="openWidget()">Verify Your Identity</button>
         </div>
-        <!-- <div class="row">
-            <iframe src="" title="W3Schools Free Online Web Tutorials" id="iframe" height="900" width="850"></iframe>
-        </div> -->
     </div>
-
 </body>
 
 </html>
@@ -41,13 +37,34 @@
     let widgetUrl;
     function load() {
         const url = `${window.location.origin}/config`
+        const envMode = 'prod';
+        const widgetBaseUrl = envMode == 'dev' ? 'http://localhost:4999' : `https://verify.hypersign.id`;
         fetch(url).
             then(resp => resp.json()).
             then(config => {
                 const { ssiAccessToken, kycAccessToken } = config;
-                widgetUrl = `https://verify.hypersign.id?kycAccessToken=${kycAccessToken}&ssiAccessToken=${ssiAccessToken}`
-                // document.getElementById('iframe').src = widgetUrl
+
+                widgetUrl = `${widgetBaseUrl}?kycAccessToken=${kycAccessToken}&ssiAccessToken=${ssiAccessToken}`
+                document.getElementById('iframe').src = widgetUrl
             })
+
+
+        // const myHeaders = new Headers();
+        // myHeaders.append("Content-Type", "application/json");
+        // myHeaders.append("Origin", "https://verify.hypersign.id");
+        // myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjFmYWQzZjJlNWIzYmFmZjMyM2E3MGVjZTMyNDlmMWNmMDU1OCIsInVzZXJJZCI6ImMzYThmZDlhLWE2MzgtNGIyNy05NThiLTE5YWMwMDMxODU4YyIsImdyYW50VHlwZSI6ImFjY2Vzc19zZXJ2aWNlX2t5YyIsImttc0lkIjoiaHM6ZG9jOm5jdWsxaWMzY3NjbW9jNGJ2X3pmd21uYTZlbnVvaXB0bHltYmZmcTdpZ3EiLCJ3aGl0ZWxpc3RlZENvcnMiOlsiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiaHR0cHM6Ly9lbnRpdHkuZGFzaGJvYXJkLmh5cGVyc2lnbi5pZCIsImh0dHBzOi8vdmVyaWZ5Lmh5cGVyc2lnbi5pZCIsImh0dHBzLy92ZXJpZnkuaHlwZXJzaWduLmlkIl0sInN1YmRvbWFpbiI6ImVudC1lNWU1M2Y2IiwiZWR2SWQiOiJoczpkZXZlbG9wZXItZGFzaGJvYXJkOmFwcDoxZmFkM2YyZTViM2JhZmYzMjNhNzBlY2UzMjQ5ZjFjZjA1NTgiLCJhY2Nlc3NMaXN0IjpbIlJFQURfVVNFUl9DT05TRU5UIiwiV1JJVEVfVVNFUl9DT05TRU5UIiwiV1JJVEVfU0VTU0lPTiIsIlJFQURfU0VTU0lPTiIsIldSSVRFX1BBU1NJVkVfTElWRUxJTkVTUyIsIldSSVRFX0RPQ19PQ1IiLCJSRUFEX1dJREdFVF9DT05GSUciLCJXUklURV9XSURHRVRfQ09ORklHIiwiVVBEQVRFX1dJREdFVF9DT05GSUciXSwiZW52IjoiZGV2IiwiYXBwTmFtZSI6Ik15IE9yZyBLWUMgU2VydmljZSIsImlzc3VlckRpZCI6ImRpZDpoaWQ6dGVzdG5ldDpkMGQ2MGM3MS1iODBkLTQ0ZjItOTQ1MS1mNjczOTEyMjEyNGYiLCJkZXBlbmRlbnRTZXJ2aWNlcyI6WyJmZDRjODA5ZDk1NTA3NzJlYmQ0M2JjYmQwMmM3OGVlZjM3NmYiXSwiaWF0IjoxNzI1MzQ3OTYwLCJleHAiOjE3MjUzNjIzNjB9.4I3RWShvYDonRbXqYfT454am6Qgs0uOD6_E45ia-1k4");
+
+
+
+        // const requestOptions = {
+        //     method: "GET",
+        //     headers: myHeaders,
+        // };
+
+        // fetch("http://localhost:3001/api/v1/e-kyc/verification/session?page=1&limit=50%20Request%20Method:%20GET", requestOptions)
+        //     .then((response) => response.json())
+        //     .then((result) => console.log(result))
+        //     .catch((error) => console.error(error));
     }
 
     function openWidget() {
@@ -56,7 +73,8 @@
 
 
     window.addEventListener('message', function (event) {
-        if (event.origin === 'https://verify.hypersign.id') {
+        // if (event.origin === 'https://verify.hypersign.id') {
+        if (event.origin === widgetBaseUrl) {
             console.log('Received message from popup:', event.data);
             // make sure to parse the data before use
             const data = JSON.parse(event.data)
